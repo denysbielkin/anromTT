@@ -19,7 +19,28 @@ module.exports = {
             {
                 test: /\.css/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.ttf$/,
+                use:
+                   [
+                       {
+                           loader: 'ttf-loader',
+                           options: {
+                               name: './src/common/styleAssets/fonts/[hash].[ext]',
+                           },
+
+                       }
+                   ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    'url-loader?limit=10000',
+                    'img-loader'
+                ]
             }
+
         ]
     },
     devServer: {

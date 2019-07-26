@@ -1,5 +1,21 @@
 import React from 'react';
 
-const App = () =><div>123</div>;
+import Header from '../Header';
+import BdayTabs from '../BdayTabs/components';
 
-export default App;
+import {StyledLayout} from './styled';
+
+const App = () => (
+    <div>
+        <BdayTabs/>
+    </div>
+);
+
+const AppContainer = () => (
+    <StyledLayout>
+        <Header/>
+        <App/>
+    </StyledLayout>
+);
+
+export default AppContainer;
