@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Card, Avatar, Spin} from 'antd';
+import moment from 'moment';
 import isEmpty from 'lodash/isEmpty';
 import axios from 'axios';
 
@@ -13,102 +14,38 @@ import {
     StyledCard
 } from './styled';
 
-export default class BdayTabs extends Component {
+export default class BdayTabs extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: [
-                {
-                    name:'Adolfo Gutierrez',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top Computer Network Architect',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Adolfo Gutierrez',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top3413manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Adolfo Gutierrez',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:' Computer Network Architect',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Lea Kristensen',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Computer Network Architect ',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Adolfo Gutierrez',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Malone Durand Durand Malone Durand',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Computer Network Architect',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Katya',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:' manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Lea Kristensen',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top ',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Malone Durand',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Computer Network Architect manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Ilona',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top3413manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Katya',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:' manager',
-                    bdate:'23131231',
-
-                },
-                {
-                    name:'Vova',
-                    img: 'http://test.anromsocial.com/api/avatar/7be413ba-2bee-43f1-a6f1-362254a7b2e0.jpg',
-                    job:'Top ',
-                    bdate:'23131231',
-
-                },
-            ],
-            isLoading:false,
+            data: [],
+            isLoading:true,
         }
 
     }
 
+    componentDidMount(){
+        const date = this.getDate()
+        console.error(date);
 
+        //place for func which will use moment.js to get 2prev weeks and 2next weeks; that func will return obj:{prev:'07.15',today:07.29',next:'08.12'}
+
+        axios.get(`http://test.anromsocial.com/api/birthdays?dateFrom=${date.prev}&dateTo=${date.next}`).then( res => {
+            console.log('response: ',res)
+            this.setState({
+                isLoading:false,
+                data: res.data.users
+            });
+        })
+    }
+
+    getDate(){
+        return {
+            prev: moment().subtract(2,'weeks').format('MM.DD'),
+            today: moment().format('MM.DD'),
+            next: moment().add(2,'weeks').format('MM.DD')
+        }
+    }
 
 
     renderCards(){
@@ -118,12 +55,12 @@ export default class BdayTabs extends Component {
                 <StyledCard key={key} size={'small'} bordered={false}>
                     <Meta
                         avatar={
-                            <Avatar size={64} src={item.img} />
+                            <Avatar size={64} src={`http://test.anromsocial.com/${item.avatarUrl}`} />
                         }
                         title={item.name}
                         description={<div>
-                            <div>{item.job}</div>
-                            <div>{item.bdate}</div>
+                            <div>{item.jobTitle}</div>
+                            <b>{item.birthday}</b>
                         </div>}
                     />
                 </StyledCard>
@@ -133,8 +70,9 @@ export default class BdayTabs extends Component {
     }
 
     render() {
+        console.log(this.state)
 
-        return this.state.isLoading ? <div style={{width:'100%', textAlign:'center'}}><Spin size={25} /></div>:(
+        return this.state.isLoading ? <div style={{width:'100%', textAlign:'center'}}><Spin size={'large'} /></div>:(
             <Container>
                 <Tabs defaultActiveKey={'1'}>
                     <TabPane key={'0'} tab={'RECENT DATES'}>
