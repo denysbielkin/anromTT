@@ -50,5 +50,5 @@ width:50%;
 
 export const StyledCard = styled(Card)`
 width: 360px;
-// max-width:  200px;
+align-self:center;
 `;
