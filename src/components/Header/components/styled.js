@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import {mainColors} from '../../../common/colors';
+import {mainColors} from '../../../common/constants';
 import boldFont from '../../../common/styleAssets/fonts/VodafoneRgBd.ttf';
 
 export const StyledHeader = styled.div`

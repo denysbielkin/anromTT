@@ -6,16 +6,10 @@ import BdayTabs from '../BdayTabs/components';
 import {StyledLayout} from './styled';
 
 const App = () => (
-    <div>
-        <BdayTabs/>
-    </div>
-);
-
-const AppContainer = () => (
     <StyledLayout>
         <Header/>
-        <App/>
+        <BdayTabs/>
     </StyledLayout>
 );
 
-export default AppContainer;
+export default App;
